@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-const Employee_SAPI_BASE_URL = "http://localhost:8080/employees";
+// Use environment variable for base URL
+const Employee_SAPI_BASE_URL = process.env.REACT_APP_API_URL + "/employees";
 
 class EmployeeService {
     saveEmployee(employee) {
-        console.log("Sending request with:", employee); // ✅ Debugging
+        console.log("Sending request with:", employee);
         return axios.post(Employee_SAPI_BASE_URL, {
             name: employee.name,
-            phoneNo: employee.phoneNo, // ✅ Ensure this is sent
+            phoneNo: employee.phoneNo,
             email: employee.email
         });
     }
@@ -16,11 +17,11 @@ class EmployeeService {
         return axios.get(Employee_SAPI_BASE_URL);
     }
 
-    getEmployeeById(id) { // ✅ Fixed missing `id` parameter
+    getEmployeeById(id) {
         return axios.get(`${Employee_SAPI_BASE_URL}/${id}`);
     }
 
-    deleteEmployeeById(id) { // ✅ Fixed missing `id` parameter
+    deleteEmployeeById(id) {
         return axios.delete(`${Employee_SAPI_BASE_URL}/${id}`);
     }
 
