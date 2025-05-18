@@ -13,7 +13,7 @@ const UpdateEmployee = () => {
         email: "",
     });
 
-    const [loading, setLoading] = useState(true); // ✅ Added missing loading state
+    const [loading, setLoading] = useState(true);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -23,31 +23,31 @@ const UpdateEmployee = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await employeeService.getEmployeeById(id); // ✅ Used `id` instead of `employee.id`
+                const response = await employeeService.getEmployeeById(id);
                 setEmployee(response.data);
             } catch (error) {
-                console.log(error);
+                console.log("Error fetching employee:", error);
             }
             setLoading(false);
         };
         fetchData();
     }, [id]);
 
-    const updateEmployee = (e) => { // ✅ Changed function name to lowercase
+    const updateEmployee = (e) => {
         e.preventDefault();
         employeeService
-            .updateEmployee(employee, id) // ✅ Corrected method name to `updateEmployee`
+            .updateEmployee(employee, id)
             .then((response) => {
-                console.log("Updated", response);
+                console.log("Updated:", response);
                 navigate("/");
             })
             .catch((error) => {
-                console.log(error);
+                console.log("Error updating employee:", error);
             });
     };
 
     if (loading) {
-        return <p className="text-center text-white">Loading...</p>; // ✅ Show loading state
+        return <p className="text-center text-white">Loading...</p>;
     }
 
     return (
@@ -62,7 +62,7 @@ const UpdateEmployee = () => {
                     name='name'
                     value={employee.name}
                     onChange={handleChange}
-                    className='w-full py-2 my-4 text-white'
+                    className='w-full py-2 my-4 text-white bg-slate-700 px-2 rounded'
                     placeholder='Name'
                 />
                 <input
@@ -70,7 +70,7 @@ const UpdateEmployee = () => {
                     name='phoneNo'
                     value={employee.phoneNo}
                     onChange={handleChange}
-                    className='w-full py-2 my-4 text-white'
+                    className='w-full py-2 my-4 text-white bg-slate-700 px-2 rounded'
                     placeholder='Phone Number'
                 />
                 <input
@@ -78,16 +78,22 @@ const UpdateEmployee = () => {
                     name='email'
                     value={employee.email}
                     onChange={handleChange}
-                    className='w-full py-2 my-4 text-white'
+                    className='w-full py-2 my-4 text-white bg-slate-700 px-2 rounded'
                     placeholder='Email'
                 />
             </div>
 
             <div className='flex my-4 space-x-4 px-20'>
-                <button onClick={updateEmployee} className='bg-green-400 hover:bg-green-700 py-2 px-6 rounded'>
+                <button
+                    onClick={updateEmployee}
+                    className='bg-green-400 hover:bg-green-700 py-2 px-6 rounded text-white font-semibold'
+                >
                     Update
                 </button>
-                <button onClick={() => navigate('/')} className='bg-red-400 hover:bg-red-700 py-2 px-6 rounded'>
+                <button
+                    onClick={() => navigate('/')}
+                    className='bg-red-400 hover:bg-red-700 py-2 px-6 rounded text-white font-semibold'
+                >
                     Cancel
                 </button>
             </div>

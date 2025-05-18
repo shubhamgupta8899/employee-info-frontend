@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import employeeService from '../service/employeeService';
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const EmployeeList = () => {
     const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ const EmployeeList = () => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await employeeService.getEmployees();
+                const response = await axios.get(`${API_BASE_URL}/api/employees`);
                 setEmployee(response.data);
             } catch (error) {
                 console.log(error);
@@ -21,22 +23,20 @@ const EmployeeList = () => {
         fetchData();
     }, []);
 
-    // ✅ Fixed Delete Function
     const deleteEmployee = async (e, id) => {
         e.preventDefault();
         try {
-            await employeeService.deleteEmployeeById(id); // Await API response
-            setEmployee((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id)); // Update UI
+            await axios.delete(`${API_BASE_URL}/api/employees/${id}`);
+            setEmployee((prevEmployees) => prevEmployees.filter((emp) => emp.id !== id));
             console.log(`Employee with ID ${id} deleted successfully`);
         } catch (error) {
             console.error("Error deleting employee:", error);
         }
     };
 
-    // ✅ Edit Function (unchanged)
     const editEmployee = (e, id) => {
         e.preventDefault();
-        navigate(`/editEmployee/${id}`)
+        navigate(`/editEmployee/${id}`);
     };
 
     return (
@@ -54,13 +54,13 @@ const EmployeeList = () => {
                 <table className="shadow border-collapse w-full">
                     <thead className="bg-slate-600 text-white">
                         <tr>
-                            <th className="px-6 py-3 uppercase tracking-wide"> Name </th>
+                            <th className="px-6 py-3 uppercase tracking-wide">Name</th>
                             <th className="px-6 py-3 uppercase tracking-wide">Phone No</th>
                             <th className="px-6 py-3 uppercase tracking-wide">Email</th>
                             <th className="px-6 py-3 uppercase tracking-wide">Action</th>
                         </tr>
                     </thead>
-                    
+
                     {!loading && (
                         <tbody>
                             {employee.length === 0 ? (
@@ -79,11 +79,15 @@ const EmployeeList = () => {
                                             <a
                                                 onClick={(e) => editEmployee(e, emp.id)}
                                                 className='hover:text-green-500 hover:cursor-pointer mr-4'
-                                            >Edit</a>
+                                            >
+                                                Edit
+                                            </a>
                                             <a
                                                 onClick={(e) => deleteEmployee(e, emp.id)}
                                                 className='hover:text-red-500 hover:cursor-pointer'
-                                            >Delete</a>
+                                            >
+                                                Delete
+                                            </a>
                                         </td>
                                     </tr>
                                 ))
